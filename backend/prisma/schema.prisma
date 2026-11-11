@@ -1,0 +1,234 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String            @id @default(cuid())
+  email         String            @unique
+  name          String?
+  emailVerified Boolean           @default(false)
+  image         String?
+  credits       Float             @default(100.0)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  proposals Proposal[]
+  votes     Vote[]
+  accounts  Account[]
+  sessions  Session[]
+  workspaces WorkspaceMember[]
+}
+
+model Workspace {
+  id        String            @id @default(cuid())
+  name      String
+  createdAt    DateTime              @default(now())
+  members      WorkspaceMember[]
+  invitations  WorkspaceInvitation[]
+}
+
+model WorkspaceInvitation {
+  id          String    @id @default(cuid())
+  workspaceId String
+  email       String
+  role        String    @default("MEMBER")
+  token       String    @unique
+  expiresAt   DateTime
+  acceptedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  @@index([workspaceId, email])
+}
+
+model WorkspaceMember {
+  id          String    @id @default(cuid())
+  workspaceId String
+  userId      String
+  role        String    @default("MEMBER")
+  createdAt   DateTime  @default(now())
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
+  @@unique([workspaceId, userId])
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  issuer                String?
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+  @@map("verification")
+}
+
+model Proposal {
+  id          String         @id @default(cuid())
+  title       String
+  description String
+  status      String @default("PENDING")
+  rationale   String?
+  creatorId   String
+  workspaceId String?
+  creator     User           @relation(fields: [creatorId], references: [id])
+  
+  votes       Vote[]
+  
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model Vote {
+  id         String   @id @default(cuid())
+  proposalId String
+  proposal   Proposal @relation(fields: [proposalId], references: [id])
+  voterId    String?
+  voter      User?    @relation(fields: [voterId], references: [id])
+  aiVoter    String?
+  weight     Float
+  support    Boolean
+  
+  createdAt  DateTime @default(now())
+}
+
+model GovernanceEvent {
+  id        String   @id @default(cuid())
+  type      String
+  payload   Json
+  createdAt DateTime @default(now())
+}
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  type      String
+  name      String
+  payload   Json
+  createdAt DateTime @default(now())
+}
+
+model DecisionLog {
+  id          String   @id @default(cuid())
+  action      String
+  rationale   String
+  impact      String?
+  confidence  Float
+  status      String   @default("LOGGED")
+  workspaceId String?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+}
+
+model EthicalCore {
+  id              String   @id @default(cuid())
+  directiveHash   String   @unique
+  formalProof     String
+  integrityStatus String   @default("VERIFIED")
+  lastHyperAudit  DateTime @default(now())
+  createdAt       DateTime @default(now())
+}
+
+model SubProject {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  status      String
+  createdAt   DateTime @default(now())
+}
+
+model XerebroConversation {
+  id        String          @id @default(uuid()) @db.Uuid
+  userId    String?         @map("user_id") @db.Uuid
+  title     String          @default("Novo contexto")
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+  messages  XerebroMessage[]
+
+  @@map("xerebro_conversations")
+}
+
+model XerebroMessage {
+  id             String             @id @default(uuid()) @db.Uuid
+  conversationId String             @map("conversation_id") @db.Uuid
+  role           String
+  content        String
+  createdAt      DateTime           @default(now()) @map("created_at")
+  conversation   XerebroConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@map("xerebro_messages")
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  status      String   @default("backlog")
+  workspaceId String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@index([workspaceId])
+}
+
+model AuditEvent {
+  id          String   @id
+  type        String
+  entityId    String
+  entityTitle String
+  status      String
+  source      String
+  workspaceId String?
+  details     Json?
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([entityId])
+}
+
+model LegalDocument {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  version     String
+  type        String
+  workspaceId String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

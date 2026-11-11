@@ -1,0 +1,3 @@
+import * as React from 'react'
+import { cn } from './utils'
+export function Badge({ className, variant = 'default', ...props }: React.HTMLAttributes<HTMLDivElement> & { variant?: 'default' | 'outline' | 'secondary' }) { return <div className={cn('inline-flex items-center rounded-full border px-2.5 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider', variant === 'default' && 'border-transparent bg-primary text-primary-foreground', variant === 'secondary' && 'border-transparent bg-secondary text-secondary-foreground', variant === 'outline' && 'bg-transparent', className)} {...props} /> }
