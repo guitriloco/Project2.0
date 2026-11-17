@@ -1,139 +1,182 @@
 # Project 2.0
 
-> Plataforma experimental de inteligência operacional, governança e evolução de sistemas.
+<p align="center">
+  <strong>AI Product Engineer · Full Stack + AI</strong><br>
+  Operational workspace for task execution, governance, decision tracking, and AI-assisted knowledge workflows.
+</p>
 
-## Visão atual
+<p align="center">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white">
+  <img alt="Next.js" src="https://img.shields.io/badge/Frontend-Next.js-000000?logo=next.js&logoColor=white">
+  <img alt="Fastify" src="https://img.shields.io/badge/Backend-Fastify-000000?logo=fastify&logoColor=white">
+  <img alt="Prisma" src="https://img.shields.io/badge/ORM-Prisma-2D3748?logo=prisma&logoColor=white">
+  <img alt="Google Gemini" src="https://img.shields.io/badge/AI-Google%20Gemini-8E75B2?logo=googlegemini&logoColor=white">
+</p>
 
-O Project 2.0 combina um Centro Operacional com módulos conceituais de Xerebro AI, governança, conhecimento e experimentação neural. O núcleo comprovado hoje é o fluxo de tarefas e decisões persistidas em PostgreSQL, apresentado por um dashboard Next.js.
+## Product overview
 
-A linguagem de “mais de 200 fases” e os nomes de soberania, unificação e sobrevivência são parte da história e da visão do produto. Eles não significam que todas essas capacidades estejam implementadas ou validadas em produção.
+Project 2.0 is a full-stack operational platform designed to support a work environment where teams can:
 
-## Stack real
+- manage tasks and execution flow
+- create, review, and audit decisions
+- monitor operational status and summaries
+- interact with AI through contextual workflows
+- keep a structured record of work history and accountability
 
-- Next.js 16, React 19 e TypeScript
-- Tailwind CSS e shadcn/ui
-- Fastify 5 e Node.js
-- Prisma 5
-- PostgreSQL via Neon
-- npm com scripts na raiz
+The project combines a Next.js frontend, a Fastify backend, Prisma persistence, and AI integration to create a controllable operating layer for internal workflows and decision support.
 
-## Começando
+## Why this project matters
 
-Pré-requisitos: Node.js 18+, npm e uma variável `DATABASE_URL` válida para o backend.
+Modern teams often deal with fragmented systems: task tracking lives in one place, decisions in another, knowledge in documents or chat tools, and operational visibility is incomplete. This application aims to reduce that fragmentation by centralizing these functions into a single interface.
+
+The value is not only in UI polish but in the underlying system design:
+
+- structured task lifecycle
+- decision capture and filtering
+- operational dashboard for leadership visibility
+- AI-assisted interaction connected to backend logic
+- extensible architecture for future workflow modules
+
+## Core capabilities
+
+- **Operational dashboard** with executive and operational views
+- **Task management** with create, update, filter and workflow states
+- **Decision registry** with historical audit trail
+- **Workspace management** for project context and team organization
+- **AI chat integration** with backend proxying to an AI service
+- **Authentication flow** with demo access patterns and separation of production logic
+- **Prisma-backed persistence** for operational records and metadata
+- **Preview-friendly frontend integration** for local and deployment testing
+
+## Architecture
+
+```mermaid
+flowchart LR
+    User[User / Operator] --> Frontend[Next.js Frontend]
+    Frontend --> API[Fastify Backend]
+    API --> Prisma[Prisma + PostgreSQL]
+    API --> Gemini[Google Gemini / AI service]
+    Frontend --> Operations[Dashboard / Tasks / Decisions]
+```
+
+### Stack
+
+| Layer | Technologies |
+| --- | --- |
+| Frontend | Next.js 16, React 19, TypeScript, Tailwind CSS |
+| Backend | Fastify, Node.js, TypeScript |
+| Data layer | Prisma, PostgreSQL |
+| AI integration | Google Gen AI SDK and AI orchestration layer |
+| Developer tooling | npm workspaces, Vitest, TypeScript |
+
+## Repository structure
+
+```text
+project-2.0/
+├── frontend/              # Next.js application and UI
+├── backend/               # Fastify API and domain routes
+├── scripts/               # Local startup and orchestration scripts
+├── docs/                  # Architecture, roadmap, usage guides
+├── .env.example           # Environment variables template
+├── package.json           # Root workspace configuration
+├── README.md              # Project overview
+├── LICENSE                # Repository license
+└── CHANGELOG.md           # Change history
+```
+
+## Getting started
+
+### Requirements
+
+- Node.js 18+
+- npm
+- PostgreSQL connection via `DATABASE_URL` for persistent storage
+- Google AI credentials if the AI functions are enabled
+
+### Environment variables
+
+Copy the template and fill in your environment values:
 
 ```bash
-git clone https://github.com/guitriloco/project-2.0.git
-cd project-2.0
+cp .env.example .env
+```
+
+Example values:
+
+```env
+DATABASE_URL=postgresql://user:pass@host:5432/db
+GEMINI_API_KEY=your_key_here
+JWT_SECRET=your_secret
+JWT_EXPIRES_IN=7d
+XEREBRO_API_KEY=optional
+ALLOWED_ORIGINS=http://localhost:3000
+```
+
+### Run the app locally
+
+```bash
 npm install
 npm run dev
 ```
 
-O comando raiz inicia os dois serviços:
+By default the workspace launches the services for:
 
 - Frontend: http://localhost:3000
 - Backend: http://localhost:3001
 - Dashboard: http://localhost:3000/dashboard
 
-`XEREBRO_BACKEND_URL` pode ser configurada para apontar para um backend remoto. Sem ela, o frontend usa `http://localhost:3001` em desenvolvimento.
+## Product workflow
 
-## Núcleo funcional
+The platform is organized around a practical operational loop:
 
-- Centro Operacional com métricas reais.
-- Criação e conclusão de tarefas.
-- Registro e consulta de decisões.
-- Filtros de tarefas e decisões.
-- Histórico de atividade e detalhes de auditoria derivados dos registros recentes.
-- Proxy Next.js para operações e chat do Xerebro.
+1. Create or review tasks.
+2. Capture decision points and status updates.
+3. Reconcile activity with recent history and audit context.
+4. Use AI-assisted chat and generation when needed.
+5. Monitor dashboards for operational clarity and executive summaries.
 
-## Estrutura
+This is the core product behavior that is currently represented in the codebase.
 
-```text
-project-2.0/
-├── frontend/              # Next.js, React e UI
-├── backend/               # Fastify, Prisma e rotas de domínio
-├── scripts/dev.mjs        # Launcher frontend + backend
-├── docs/ARCHITECTURE.md   # Arquitetura técnica atual
-├── docs/ROADMAP.md        # Prioridades de evolução
-├── docs/USAGE.md          # Comandos e endpoints comprovados
-└── docs/                  # Visão conceitual e histórico do produto
-```
+## Notes on scope
 
-## Classificação dos módulos
+The repository includes both production-oriented modules and historical/experimental modules. These are intentionally separated in documentation to make clear what is already integrated and validated versus what remains conceptual or exploratory.
 
-- **Funcional:** dashboard, operações, tarefas, decisões, Prisma e proxies Next.js.
-- **Experimental:** neural, consciousness, symbiosis, dimensional, XR, simulações e módulos de evolução.
-- **Histórico:** fases conceituais e documentos que registram a visão do produto.
+In practical terms:
 
-Os módulos históricos e experimentais são preservados para referência e futuras variações. Eles não devem ser anunciados como funcionalidades entregues sem integração, testes e persistência comprovados.
+- **Functional modules**: dashboard, tasks, decisions, workspaces, authentication flow, API proxies
+- **Experimental modules**: conceptual AI, neural, simulation or exploratory systems
+- **Historical modules**: earlier design ideas preserved for reference and future iteration
 
-## Documentação
+This distinction matters for portfolio presentation because it shows engineering judgment and product discipline.
 
-- [Arquitetura](docs/ARCHITECTURE.md)
-- [Roadmap](docs/ROADMAP.md)
-- [Guia de uso](docs/USAGE.md)
-- [Contribuição](CONTRIBUTING.md)
-- [Licença](LICENSE)
-
-## Desenvolvimento
+## Developer commands
 
 ```bash
 npm run dev
 npm run build
 npm run typecheck
-npm run start
+npm run test
 ```
 
-Para alterações maiores, preserve o branch original, crie uma branch de trabalho e valide frontend, backend, banco e Preview antes de abrir um Pull Request.
+## Documentation
 
-## Estado atual e alterações realizadas
+- [Architecture](docs/ARCHITECTURE.md)
+- [Roadmap](docs/ROADMAP.md)
+- [Usage guide](docs/USAGE.md)
+- [Contributing](CONTRIBUTING.md)
+- [License](LICENSE)
 
-Este repositório é o backup do estado atual trabalhado nesta sessão. O histórico completo dos commits foi preservado no branch `product-enhancement`.
+## Security and operational notes
 
-### Funcionalidades implementadas
+- Keep secrets in environment variables and never store them in source control.
+- The preview/demo mode is intended for testing and demonstration only.
+- Production-grade authentication, authorization and data isolation should be reviewed before external deployment.
+- AI services and model calls should be controlled with rate limits, validation and operational guardrails.
 
-- Dashboard operacional em Next.js com navegação para Executivo, Governança, Workspaces e Produtividade.
-- Painel executivo com resumo de tarefas, decisões, propostas e auditoria.
-- Centro Operacional com leitura de métricas e estados de carregamento/fallback.
-- Gerenciamento de workspaces com listagem, criação, edição e exclusão na interface.
-- Fluxos de tarefas: criação, atualização de status e consulta.
-- Registro de decisões, filtros e visualização de atividade recente.
-- Histórico/auditoria derivados dos registros operacionais.
-- Chat do Xerebro com proxy Next.js para o backend.
-- Formulário de autenticação e mecanismo de código de acesso para demonstração.
-- Identidade técnica de Preview para permitir testar o ambiente sem login, mantendo o fluxo de autenticação real separado para produção.
-- Integração do frontend com `XEREBRO_BACKEND_URL` e rotas proxy `/api/operations/*`.
-- Configuração de deploy do backend na Vercel, incluindo entrypoint serverless e regras de rewrite.
-- Dependências do backend ajustadas para execução com Express/Fastify, TypeScript e Prisma.
-- Build e typecheck do frontend validados durante o trabalho.
+## License
 
-### Deploy e acesso
+This project is licensed under the MIT license. See the [LICENSE](LICENSE) file for details.
 
-Os endereços de Preview são temporários e podem deixar de existir. Para acessar a aplicação, use o domínio exibido no deployment ativo do projeto `frontend` na Vercel e acrescente:
+## Positioning
 
-- `/dashboard` — dashboard principal
-- `/executive` — painel executivo
-
-A proteção de Deployment Protection/SSO da Vercel precisa estar desativada quando o Preview for usado como demonstração pública. O frontend pode abrir mesmo quando a API estiver indisponível; nesse caso, os componentes exibem estado vazio de Preview em vez de inventar dados persistidos.
-
-### Banco, persistência e limitações conhecidas
-
-O sistema foi estruturado para persistir dados em PostgreSQL usando Prisma e Neon. Para salvar tarefas, decisões e workspaces de forma permanente, o backend publicado precisa estar com `DATABASE_URL` e `BETTER_AUTH_SECRET` configurados no ambiente correto da Vercel e com as migrações Prisma aplicadas.
-
-O modo Preview sem sessão é destinado a demonstração e diagnóstico. Ele não substitui autenticação real nem deve ser usado como controle de acesso em produção. Se a API ou o banco estiverem indisponíveis, o frontend pode mostrar dados vazios ou um workspace local de Preview; isso não significa que o registro foi salvo no banco.
-
-### Histórico técnico desta sessão
-
-Os principais commits realizados incluem:
-
-- `feat: add demo authentication endpoint and demo login functionality`
-- `feat: add demo access code validation and update API request handling`
-- `feat: add preview operator identity for non-production environments`
-- `feat: add API handler and Vercel rewrite rule`
-- `feat: refactor backend API and modularize route registration`
-- `feat: enhance executive panel fetcher with fallback summary`
-
-## Licença
-
-Este projeto está sob a licença MIT. Veja [LICENSE](LICENSE).
-
-**Project 2.0 — A Ressonância**
+This repository is best framed as a product-style engineering project in the AI + operations space: a system that combines software architecture, product thinking, operational dashboards, and generative AI integration into a usable interface.
